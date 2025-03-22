@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Welcome</title></head>
+<body>
+    <h1>Are you a Customer, Delivery Boy, or Seller?</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <select name="role">
+            <option value="customer">Customer</option>
+            <option value="delivery_boy">Delivery Boy</option>
+            <option value="seller">Seller</option>
+        </select>
+        <button type="submit">Next</button>
+    </form>
+</body>
+</html>
