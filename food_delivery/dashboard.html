@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head><title>Dashboard</title></head>
+<body>
+    <h1>Welcome, {{ profile.name }} ({{ profile.role }})</h1>
+    {% if profile.role == 'customer' %}
+        <h2>Share Food</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <textarea name="description" placeholder="What food to share?"></textarea><br>
+            <input type="text" name="contact_number" placeholder="Contact Number"><br>
+            <button type="submit">Post Request</button>
+        </form>
+        <h3>Your Requests</h3>
+        <ul>
+            {% for req in requests %}
+                <li>{{ req.description }} - {{ req.status }}</li>
+            {% endfor %}
+        </ul>
+    {% elif profile.role == 'delivery_boy' %}
+        <h2>Available Requests</h2>
+        <ul>
+            {% for req in requests %}
+                <li>{{ req.description }} - {{ req.customer.name }}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="request_id" value="{{ req.id }}">
+                        <button type="submit">Accept</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif profile.role == 'seller' %}
+        <h2>Add Item</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="item_name" placeholder="Item Name"><br>
+            <textarea name="description" placeholder="Description"></textarea><br>
+            <input type="file" name="image"><br>
+            <button type="submit">Add Item</button>
+        </form>
+        <h3>Your Items</h3>
+        <ul>
+            {% for item in items %}
+                <li>{{ item.item_name }} - {{ item.description }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
